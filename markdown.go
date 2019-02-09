@@ -308,6 +308,11 @@ func New(opts ...Option) *Markdown {
 	if p.extensions&Footnotes != 0 {
 		p.notes = make([]*reference, 0)
 	}
+
+    // ADDED BY L. BOYD FOLLOWING https://github.com/russross/blackfriday/pull/
+    // 412/commits/4e5da679f1a83b9cafd86daa94e646142482ef72#diff-
+    // 4c74d030dafa9036e73f63926059db29L1353
+    p.inlineCallback['$'] = math
 	return &p
 }
 

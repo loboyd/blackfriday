@@ -36,6 +36,12 @@ const (
 	TableHead
 	TableBody
 	TableRow
+
+    // ADDED BY L. BOYD FOLLOWING https://github.com/russross/blackfriday/pull/
+    // 412/commits/4e5da679f1a83b9cafd86daa94e646142482ef72#diff-
+    // 4c74d030dafa9036e73f63926059db29L1353
+    Math
+    MathBlock
 )
 
 var nodeTypeNames = []string{
@@ -63,6 +69,12 @@ var nodeTypeNames = []string{
 	TableHead:      "TableHead",
 	TableBody:      "TableBody",
 	TableRow:       "TableRow",
+
+    // ADDED BY L. BOYD FOLLOWING https://github.com/russross/blackfriday/pull/
+    // 412/commits/4e5da679f1a83b9cafd86daa94e646142482ef72#diff-
+    // 4c74d030dafa9036e73f63926059db29L1353
+    Math:           "Math",
+    MathBlock:      "MathBlock",
 }
 
 func (t NodeType) String() string {

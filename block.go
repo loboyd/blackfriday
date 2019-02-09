@@ -189,6 +189,14 @@ func (p *Markdown) block(data []byte) {
 			}
 		}
 
+        // ADDED BY L. BOYD FOLLOWING https://github.com/russross/blackfriday/
+        // pull/412/commits/4e5da679f1a83b9cafd86daa94e646142482ef72#diff-
+        // 4c74d030dafa9036e73f63926059db29L1353
+        if i := p.blockMath(data); i > 0 {
+            data = data[i:]
+            continue
+        }
+
 		// anything else must look like a normal paragraph
 		// note: this finds underlined headings, too
 		data = data[p.paragraph(data):]
@@ -1422,6 +1430,28 @@ gatherlines:
 		}
 	}
 	return line
+}
+
+func (p *Markdown) blockMath(data []byte) int {
+    if len(data) <= 4 || data[0] != '$' || data[1] != '$' || data[2] == '$' {
+        return 0
+    }
+
+    // find next $$
+    var end int
+    for end = 2; end+1 < len(data) && (data[end] != '$' || data[end+1] != '$'); end++ {
+    }
+
+    // $$ not match
+    if end+1 == len(data) {
+        return 0
+    }
+
+    // render the display math
+    container := p.addChild(MathBlock, 0)
+    container.Literal = data[2:end]
+
+    return end + 2
 }
 
 // render a single paragraph that has already been parsed out

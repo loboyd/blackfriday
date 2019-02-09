@@ -463,6 +463,14 @@ var (
 	h6Tag              = []byte("<h6")
 	h6CloseTag         = []byte("</h6>")
 
+    // ADDED BY L. BOYD FOLLOWING https://github.com/russross/blackfriday/pull/
+    // 412/commits/4e5da679f1a83b9cafd86daa94e646142482ef72#diff-
+    // 4c74d030dafa9036e73f63926059db29L1353
+    mathTag            = []byte(`\(`)
+    mathCloseTag       = []byte(`\)`)
+    blockMathTag       = []byte(`<p>\[`)
+    blockMathCloseTag  = []byte(`\]</p>`)
+
 	footnotesDivBytes      = []byte("\n<div class=\"footnotes\">\n\n")
 	footnotesCloseDivBytes = []byte("\n</div>\n")
 )
@@ -824,6 +832,17 @@ func (r *HTMLRenderer) RenderNode(w io.Writer, node *Node, entering bool) WalkSt
 			r.out(w, trCloseTag)
 			r.cr(w)
 		}
+    // ADDED BY L.BOYD FOLLOWING https://github.com/russross/blackfriday/pull/
+    // 412/commits/4e5da679f1a83b9cafd86daa94e646142482ef72#diff-
+    // 4c74d030dafa9036e73f63926059db29L1353
+    case Math:
+        r.out(w, mathTag)
+        escapeHTML(w, node.Literal)
+        r.out(w, mathCloseTag)
+    case MathBlock:
+        r.out(w, blockMathTag)
+        escapeHTML(w, node.Literal)
+        r.out(w, blockMathCloseTag)
 	default:
 		panic("Unknown node type " + node.Type.String())
 	}
